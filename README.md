@@ -68,7 +68,7 @@ This is a simplified, wind-informed source-area representation. It is **not** a 
 * Aridity analysis
 * Seasonal peak of season and phenological offset (ΔPOS)
 * Comparison of SIF and GPP peak timing with incoming shortwave radiation
-* OCO-3 partial-coverage reconstruction and its validation; sensitivity checks
+* OCO-3 partial-coverage reconstruction and its validation; peak-fitting sensitivity (harmonic vs. periodic-spline fits)
 
 ## 📁 Repository structure
 
@@ -86,7 +86,7 @@ This is a simplified, wind-informed source-area representation. It is **not** a 
 │   ├── 06_phenology_peak_timing/       POS, ΔPOS, radiation-timing analysis
 │   ├── 07_figures/                     manuscript figure scripts
 │   ├── 08_lst_extension/               land surface temperature extraction and statistics
-│   └── 09_sensitivity/                 supporting sensitivity / QA checks
+│   └── archive/                        internal QA scripts not used in the manuscript
 ├── docs/                       workflow, data availability, reproducibility, script-name mapping
 ├── data/                       README only (no data committed)
 ├── figures/  outputs/          README only (generated files are git-ignored)
@@ -96,11 +96,13 @@ This is a simplified, wind-informed source-area representation. It is **not** a 
 
 The full raw-data workflow is **not one-click reproducible**; see [docs/reproducibility.md](docs/reproducibility.md) for the honest list of gaps.
 
+> **⚠️ Master-table provenance.** `SIF_GPP_Analysis_Ready_Master.csv` is the common analysis-ready input used by most downstream analyses (coupling, SID, peak timing, most figures). The exact upstream script that generated this final master table **could not be recovered** from the project archive. This repository therefore supports **analysis-level reproducibility** (from the master table onward, once you have a compatible table) but **not full raw-data-to-final-table reproducibility**. The preprocessing, footprint, SIF-extraction and OCO-3 scripts that feed into it are included for transparency, but the final assembly step is missing.
+
 1. **Clone** the repository.
 2. **Create the environment:** `conda env create -f environment.yml` (or `pip install -r requirements.txt`). Python 3.13 was used.
 3. **Download the public data** listed in [docs/data_availability.md](docs/data_availability.md), accepting each provider's terms.
 4. **Configure paths:** set `SIF_GPP_ROOT` (and optionally `SIF_GPP_DATA_ROOT`, `NE_BASEMAP_TIF`) as in [config/paths.example.env](config/paths.example.env).
-5. **Run the scripts in order** (`01_…` → `09_…`; order and prerequisites in the reproducibility document), e.g.:
+5. **Run the scripts in order** (`01_…` → `08_…`; order and prerequisites in the reproducibility document), e.g.:
    ```bash
    export SIF_GPP_ROOT=/path/to/working/root
    python scripts/04_coupling/01_harmonic_deseasonalization_and_core_statistics.py

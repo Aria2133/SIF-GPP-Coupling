@@ -1,6 +1,8 @@
 # ♻️ Reproducibility
 
-This page states what can and cannot be reproduced from this repository **as verified against the original project files**. The full raw-data workflow is **not** one-click reproducible: it depends on large third-party downloads, on local folder layouts created by earlier steps, and on a few intermediate products whose generating script could not be located (see [Known gaps](#known-gaps)).
+This page states what can and cannot be reproduced from this repository **as verified against the original project files**.
+
+> **Master-table provenance.** `SIF_GPP_Analysis_Ready_Master.csv` is the common analysis-ready input used by most downstream analyses. The exact upstream script that generated this final master table **could not be recovered**. The repository therefore supports **analysis-level reproducibility** (from the master table onward) but **not full raw-data-to-final-table reproducibility**. The full raw-data workflow is **not** one-click reproducible: it depends on large third-party downloads, on local folder layouts created by earlier steps, and on a few intermediate products whose generating script could not be located (see [Known gaps](#known-gaps)).
 
 ## Software environment
 
@@ -28,7 +30,7 @@ See [`config/paths.example.env`](../config/paths.example.env). Scripts still exp
 Within a folder, run in numeric/alphabetical order. Across folders:
 
 1. `01_ec_preprocessing/` — wind-direction histograms → conservative GPP extraction → merged monthly input table → metadata recovery / repair / completeness audit.
-2. `02_footprint_sif_extraction/` — monthly footprint rasters → footprint-aware SIF companion rasters → coverage inventories → per-product finalization (GOSIF, GOME-2, TROPOSIF) → five-product master harmonization.
+2. `02_footprint_sif_extraction/` — monthly footprint rasters → footprint-aware SIF companion rasters → coverage inventories → per-product finalization (GOSIF, GOME-2, TROPOSIF) → master harmonization (the script's archive audit covered an additional product; the final analysis uses only GOSIF, GOME-2, TROPOSIF and OCO-3).
 3. `03_oco3_reconstruction/` — proof of concept → pre-production validation → positive-coverage final test → final production. (`troposif_tested_not_retained/` documents the tested, rejected TROPOSIF reconstruction.)
 4. *(Not in repository — see gaps)* construction of the analysis-ready site-month master table (`SIF_GPP_Analysis_Ready_Master.csv`).
 5. `04_coupling/01_harmonic_deseasonalization_and_core_statistics.py` → `04_coupling/mechanistic_drivers/` → `04_coupling/advanced_coupling/` → `04_coupling/environmental_modulation/`.
@@ -36,7 +38,7 @@ Within a folder, run in numeric/alphabetical order. Across folders:
 7. `06_phenology_peak_timing/climatological_pos/` and `06_phenology_peak_timing/year_specific_mechanism/` (`step1` → `step12`).
 8. `08_lst_extension/` (01 → 04), needed only for the LST panels.
 9. `07_figures/`.
-10. `09_sensitivity/` (supporting checks).
+10. `archive/` holds internal QA scripts that are not part of the manuscript workflow (not required).
 
 ## Which analyses need which data
 
@@ -83,7 +85,7 @@ Analysis results (non-figure):
 | Partial Spearman with tower-block bootstrap (1,000 resamples); per-tower-standardized interaction models with site effects and tower-clustered SE | `04_coupling/environmental_modulation/02_partial_corr_and_interaction_unique_effect.py` (primary), `04_coupling/advanced_coupling/03_partial_correlation.py`, `04_coupling/environmental_modulation/audit_environmental_interactions_and_biome.py` (independent check) |
 | SID construction and validation | `05_stress_induced_decoupling/02_*`, `03_*`, `04_*` |
 | Climatological POS (year-block bootstrap, 500) and year-specific POS (delete-one-month jackknife) | `06_phenology_peak_timing/climatological_pos/pos_lib.py`, `year_specific_mechanism/lib_year_specific_pos.py` |
-| SIF vs GPP peak distance to peak shortwave radiation (median absolute offsets, 1,629 site-years) | `06_phenology_peak_timing/year_specific_mechanism/step6_*`, `step10_*`, `step11_*` — **Probable**; the exact script producing the 0.79 vs 1.34-month medians was not traced line by line |
+| Radiation-offset test: median abs(POS_SIF − POS_SW_IN) = 0.79 months, median abs(POS_GPP − POS_SW_IN) = 1.34 months, n = 1,629 site-years, paired Wilcoxon p = 7.5e-71 | `06_phenology_peak_timing/year_specific_mechanism/step6_hypothesis_A_D_light_lue.py` — **Confirmed**: it computes the circular absolute offsets to the `SW_IN` peak timing, the medians and `scipy.stats.wilcoxon`, and writes `hypothesisA_light_timing_test.csv`, which contains exactly 1629, 0.79, 1.34 and 7.547820485498006e-71. Input: `SiteYear_Product_PeakTiming_Master.csv` from `step1_build_peak_timing_master.py`. |
 | OCO-3 reconstruction (544 observed + 115 reconstructed site-months) | `03_oco3_reconstruction/04_Run_OCO3_Final_Production_Reconstruction.py` |
 
 Original-to-public script names are listed in [`script_name_mapping.csv`](script_name_mapping.csv).
@@ -91,11 +93,10 @@ Original-to-public script names are listed in [`script_name_mapping.csv`](script
 ## Known gaps
 
 * **Analysis-ready master table builder.** `SIF_GPP_Analysis_Ready_Master.csv` (all products, including OCO-2 rows that later scripts drop) is the input to nearly every analysis, but the script that assembled it was **not found** in the project. Its contents are described by the `SIF_EC_SIF_GPP_Relationship_Analysis` reports in the original workspace. The closest repository code is `02_footprint_sif_extraction/05_Five_Product_SIF_Master_Harmonization_Audit.py` and the per-product finalization scripts.
-* **Predictive framework (Objective 3).** The manuscript states an objective on predicting GPP from SIF with environmental information; no script for this was identified.
 * **Source of per-site metadata** (measurement/canopy heights, source-area radii) is handled by the metadata-recovery scripts, but the original manual metadata spreadsheets are not part of this repository.
 * **"GEE" in script names.** Several preprocessing scripts (and some output file names) refer to "GEE"-ready inputs, a legacy of an earlier Google Earth Engine plan. No Earth Engine code was found in the project and the manuscript does not describe an Earth Engine step; footprint rasterization here is done locally in Python (`02_footprint_sif_extraction/01_*`).
-* **Version identifiers** for GOSIF, TROPOSIF and OCO-3 are not recorded in project files.
-* **Sensitivity scripts** in `09_sensitivity/` (GOME-2 quality flag, satellite-day-restricted GPP, TROPOSIF QA) are supporting checks that are not referred to in the current manuscript draft.
+* **Product versions** are only partly recoverable; see [data_availability.md](data_availability.md#product-versions-and-provenance-verified-from-the-project-archive). GOSIF's version is not recoverable from the archive.
+* **Internal QA scripts** (GOME-2 quality flag, satellite-day-restricted GPP, TROPOSIF QA, June leave-out) are in `scripts/archive/` and are not used in the manuscript. The manuscript's peak-fitting sensitivity (sign of ΔPOS under harmonic vs periodic-spline fits, 22.4% of site-years) comes from `06_phenology_peak_timing/year_specific_mechanism/step9_methodological_E_F_G.py`.
 * Scripts were run interactively over time; several outputs depend on the state of folders created by earlier steps and by superseded runs. A clean-slate rerun has **not** been performed.
 
 ## Computational notes

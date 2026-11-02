@@ -1,6 +1,6 @@
 """
 Independent redo (fresh code) of:
-  (A) Within-site SIF x environmental-driver interaction models predicting GPP anomalies,
+  (A) Within-site SIF x environmental-driver interaction models with GPP anomalies as the response variable,
       fit product-specific AND pooled-with-product-explicit, with careful convergence /
       singular-random-effect diagnostics for EVERY model (including the pooled ones,
       which an earlier audit skipped the random-slope check for because N > 12000).

@@ -19,4 +19,4 @@ preferred-citation:
     - family-names: "Verfaillie"
       given-names: "Joseph"
   # TODO: replace this block with type: article (journal, year, volume, doi) once the paper has a DOI.
-  notes: "Manuscript in preparation; author list taken from the manuscript preprint and should be confirmed before release."
+  notes: "Manuscript in preparation; the author list must be confirmed against the final submitted manuscript before release."
