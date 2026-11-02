@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as below and also cite the associated paper once it is published."
+title: "SIF-GPP-Coupling: analysis code for global SIF-GPP coupling and phenological offsets across eddy-covariance towers"
+type: software
+authors:
+  - family-names: "Ahmadi"
+    given-names: "Aria"
+license: MIT
+# repository-code: "https://github.com/<GITHUB_USERNAME>/SIF-GPP-Coupling"   # fill in after the repository is created
+# doi: ""   # fill in if a Zenodo (or similar) archive DOI is minted for a release
+preferred-citation:
+  type: unpublished
+  title: "Global SIF-GPP Coupling and Phenological Offsets Across Eddy-Covariance Towers"
+  authors:
+    - family-names: "Ahmadi"
+      given-names: "Aria"
+    - family-names: "Zahraie"
+      given-names: "Banafsheh"
+    - family-names: "Verfaillie"
+      given-names: "Joseph"
+  # TODO: replace this block with type: article (journal, year, volume, doi) once the paper has a DOI.
+  notes: "Manuscript in preparation; author list taken from the manuscript preprint and should be confirmed before release."

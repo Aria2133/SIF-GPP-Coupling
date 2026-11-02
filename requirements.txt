@@ -1,0 +1,24 @@
+# Versions below are those installed in the authors' Python 3.13.4 environment when the analyses were run.
+# They are a record, not a validated lock file; older/newer versions may work.
+numpy>=2.2
+pandas>=2.3
+scipy>=1.16
+matplotlib>=3.10
+statsmodels>=0.14
+scikit-learn>=1.7
+cartopy>=0.25
+rasterio>=1.4
+shapely>=2.1
+pyproj>=3.7
+geopandas>=1.1
+h5py>=3.14
+netCDF4>=1.7
+openpyxl>=3.1
+pillow>=11
+tqdm
+joblib
+reportlab
+pypdf
+# Optional (used by some model-comparison / reconstruction scripts; imported inside try/except where noted in the scripts)
+xgboost
+catboost

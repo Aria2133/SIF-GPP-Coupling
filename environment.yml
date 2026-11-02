@@ -1,0 +1,28 @@
+name: sif-gpp
+channels:
+  - conda-forge
+dependencies:
+  - python=3.13
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - statsmodels
+  - scikit-learn
+  - cartopy
+  - rasterio
+  - shapely
+  - pyproj
+  - geopandas
+  - h5py
+  - netcdf4
+  - openpyxl
+  - pillow
+  - tqdm
+  - joblib
+  - reportlab
+  - pypdf
+  - pip
+  - pip:
+      - xgboost
+      - catboost
